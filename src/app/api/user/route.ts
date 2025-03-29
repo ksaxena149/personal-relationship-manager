@@ -40,19 +40,21 @@ export async function PUT(req: AuthRequest) {
 
   try {
     const userId = req.user!.id;
-    const { firstName, lastName } = await req.json();
+    const { firstName, lastName, profileImage } = await req.json();
 
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
         firstName,
         lastName,
+        profileImage,
       },
       select: {
         id: true,
         email: true,
         firstName: true,
         lastName: true,
+        profileImage: true,
         createdAt: true,
       },
     });

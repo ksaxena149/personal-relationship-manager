@@ -1,21 +1,60 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import ImageUploader from '@/components/ui/ImageUploader';
+import { toast } from 'react-hot-toast';
+
+interface User {
+  id: number;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  profileImage: string | null;
+}
 
 export default function SettingsPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   
   useEffect(() => {
-    // Get user from localStorage
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      setUser(JSON.parse(userStr));
-    }
-    
     // Get theme preference
     const theme = localStorage.getItem('theme') || 'dark';
     setIsDarkMode(theme === 'dark');
+    
+    // Fetch user data from API
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = '/auth/login';
+          return;
+        }
+        
+        const response = await fetch('/api/user', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        
+        const data = await response.json();
+        setUser(data.data);
+        setFirstName(data.data.firstName || '');
+        setLastName(data.data.lastName || '');
+        setProfileImage(data.data.profileImage || null);
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+      }
+    };
+    
+    fetchUserData();
   }, []);
   
   const toggleTheme = () => {
@@ -23,6 +62,49 @@ export default function SettingsPage() {
     setIsDarkMode(!isDarkMode);
     localStorage.setItem('theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/auth/login';
+        return;
+      }
+      
+      const response = await fetch('/api/user', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          profileImage
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update profile');
+      }
+      
+      const data = await response.json();
+      setUser(data.data);
+      toast.success('Profile updated successfully');
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      toast.error('Failed to update profile');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleImageUpload = (imageUrl: string) => {
+    setProfileImage(imageUrl);
   };
 
   return (
@@ -33,11 +115,57 @@ export default function SettingsPage() {
         <div>
           <h2 className="text-xl font-semibold mb-4">Account</h2>
           {user ? (
-            <div className="space-y-2">
-              <p className="text-gray-700 dark:text-gray-300">
-                <span className="font-medium">Email:</span> {user.email}
-              </p>
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                <ImageUploader 
+                  currentImage={profileImage} 
+                  onImageUpload={handleImageUpload} 
+                />
+                
+                <div className="flex-1 w-full space-y-4">
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                    <p className="mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-100 dark:bg-gray-900">
+                      {user.email}
+                    </p>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">First Name</label>
+                      <input
+                        type="text"
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Last Name</label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-sm disabled:opacity-50"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
           ) : (
             <p>Loading user information...</p>
           )}

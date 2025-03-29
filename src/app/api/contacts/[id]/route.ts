@@ -79,6 +79,7 @@ export async function PUT(
       phoneNumber,
       address,
       birthday,
+      profileImage,
     } = await req.json();
 
     // Validate required fields
@@ -117,6 +118,7 @@ export async function PUT(
         phoneNumber,
         address,
         birthday: parsedBirthday,
+        profileImage,
       },
     });
 

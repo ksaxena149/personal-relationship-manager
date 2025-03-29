@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import ProfileImage from '@/components/ui/ProfileImage';
 
 interface Note {
   id: number;
@@ -26,6 +27,7 @@ interface Contact {
   phoneNumber: string | null;
   address: string | null;
   birthday: string | null;
+  profileImage: string | null;
   notes: Note[];
   reminders: Reminder[];
 }
@@ -148,9 +150,17 @@ export default function ContactDetailClient({ contactId }: { contactId: string }
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">
-          {contact.firstName} {contact.lastName}
-        </h1>
+        <div className="flex items-center">
+          <ProfileImage 
+            src={contact.profileImage} 
+            alt={`${contact.firstName} ${contact.lastName || ''}`} 
+            size="lg"
+            className="mr-6" 
+          />
+          <h1 className="text-3xl font-bold">
+            {contact.firstName} {contact.lastName}
+          </h1>
+        </div>
         <div className="flex space-x-3">
           <Link
             href={`/contacts/${contact.id}/edit`}

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import ImageUploader from '@/components/ui/ImageUploader';
 
 export default function NewContactPage() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function NewContactPage() {
     relationship: '',
     notes: ''
   });
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -25,6 +27,10 @@ export default function NewContactPage() {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleImageUpload = (imageUrl: string) => {
+    setProfileImage(imageUrl);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,7 +46,8 @@ export default function NewContactPage() {
         email: formData.email,
         phoneNumber: formData.phoneNumber,
         address: formData.address,
-        birthday: formData.birthday || undefined
+        birthday: formData.birthday || undefined,
+        profileImage
       };
 
       // Get the auth token from localStorage
@@ -94,6 +101,13 @@ export default function NewContactPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex justify-center mb-6">
+            <ImageUploader
+              currentImage={profileImage}
+              onImageUpload={handleImageUpload}
+            />
+          </div>
+
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium">

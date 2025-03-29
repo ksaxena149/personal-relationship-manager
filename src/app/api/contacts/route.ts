@@ -30,7 +30,7 @@ export async function POST(req: AuthRequest) {
 
   try {
     const userId = req.user!.id;
-    const { firstName, lastName, email, phoneNumber, address, birthday } = await req.json();
+    const { firstName, lastName, email, phoneNumber, address, birthday, profileImage } = await req.json();
 
     // Validate required fields
     if (!firstName) {
@@ -56,6 +56,7 @@ export async function POST(req: AuthRequest) {
         phoneNumber,
         address,
         birthday: parsedBirthday,
+        profileImage,
       },
     });
 
