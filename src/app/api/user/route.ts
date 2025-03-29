@@ -22,6 +22,7 @@ export async function GET(req: AuthRequest) {
         email: true,
         firstName: true,
         lastName: true,
+        profileImage: true,
         createdAt: true,
       },
     });

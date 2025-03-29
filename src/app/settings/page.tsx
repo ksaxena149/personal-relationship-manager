@@ -95,6 +95,11 @@ export default function SettingsPage() {
       const data = await response.json();
       setUser(data.data);
       toast.success('Profile updated successfully');
+      
+      // Dispatch custom event to notify other components about the profile update
+      window.dispatchEvent(new CustomEvent('profileUpdated', { 
+        detail: { userData: data.data } 
+      }));
     } catch (err) {
       console.error('Error updating profile:', err);
       toast.error('Failed to update profile');

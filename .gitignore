@@ -24,6 +24,14 @@
 # misc
 .DS_Store
 *.pem
+/public/uploads/*.jpg
+/public/uploads/*.png
+/public/uploads/*.jpeg
+/public/uploads/*.gif
+/public/uploads/*.webp
+/public/uploads/*.svg
+/public/uploads/*.ico
+/public/uploads/*.heic
 
 # debug
 npm-debug.log*

@@ -3,6 +3,7 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import ImageUploader from '@/components/ui/ImageUploader';
 
 interface Contact {
   id: number;
@@ -12,6 +13,7 @@ interface Contact {
   phoneNumber: string | null;
   address: string | null;
   birthday: string | null;
+  profileImage: string | null;
 }
 
 export default function EditContactClient({ contactId }: { contactId: string }) {
@@ -28,6 +30,7 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
   const [birthday, setBirthday] = useState('');
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   
   useEffect(() => {
     async function fetchContact() {
@@ -63,6 +66,7 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
         setEmail(contactData.email || '');
         setPhoneNumber(contactData.phoneNumber || '');
         setAddress(contactData.address || '');
+        setProfileImage(contactData.profileImage || null);
         
         // Format date for input if available
         if (contactData.birthday) {
@@ -82,6 +86,10 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
 
     fetchContact();
   }, [contactId, router]);
+
+  const handleImageUpload = (imageUrl: string) => {
+    setProfileImage(imageUrl);
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -108,7 +116,8 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
           email: email || null,
           phoneNumber: phoneNumber || null,
           address: address || null,
-          birthday: birthday || null
+          birthday: birthday || null,
+          profileImage
         })
       });
       
@@ -169,6 +178,13 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex justify-center mb-6">
+            <ImageUploader
+              currentImage={profileImage}
+              onImageUpload={handleImageUpload}
+            />
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
