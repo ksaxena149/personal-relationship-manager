@@ -18,6 +18,34 @@ export default function Navbar() {
     // Get theme preference from localStorage or default to dark
     const theme = localStorage.getItem('theme') || 'dark';
     setIsDarkMode(theme === 'dark');
+
+    // Listen for storage events (when localStorage changes)
+    const handleStorageChange = () => {
+      const currentToken = localStorage.getItem('token');
+      setIsLoggedIn(!!currentToken);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Create a custom event listener for login state changes
+    const handleLoginStateChange = () => {
+      const currentToken = localStorage.getItem('token');
+      setIsLoggedIn(!!currentToken);
+    };
+    
+    window.addEventListener('loginStateChanged', handleLoginStateChange);
+    
+    // Check login status periodically
+    const checkLoginInterval = setInterval(() => {
+      const currentToken = localStorage.getItem('token');
+      setIsLoggedIn(!!currentToken);
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('loginStateChanged', handleLoginStateChange);
+      clearInterval(checkLoginInterval);
+    };
   }, []);
 
   const toggleTheme = () => {

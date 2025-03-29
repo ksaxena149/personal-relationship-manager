@@ -34,6 +34,9 @@ export default function LoginPage() {
       // Save token and user data to localStorage
       localStorage.setItem('token', data.data.token);
       localStorage.setItem('user', JSON.stringify(data.data.user));
+      
+      // Dispatch a custom event to notify components about login state change
+      window.dispatchEvent(new Event('loginStateChanged'));
 
       // Redirect to dashboard
       router.push('/dashboard');
