@@ -60,6 +60,7 @@ model Reminder {
   reminderDate  DateTime
   description   String
   isRecurring   Boolean   @default(false)
+  isCompleted   Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)

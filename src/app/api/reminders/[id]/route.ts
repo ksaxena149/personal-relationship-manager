@@ -73,6 +73,7 @@ export async function PUT(
       reminderDate,
       description,
       isRecurring,
+      isCompleted,
     } = await req.json();
 
     // Validate required fields
@@ -126,6 +127,7 @@ export async function PUT(
         reminderDate: parsedReminderDate,
         description,
         isRecurring: isRecurring || false,
+        isCompleted: typeof isCompleted === 'boolean' ? isCompleted : undefined,
       },
       include: {
         contact: {

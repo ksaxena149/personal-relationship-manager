@@ -16,7 +16,8 @@
     "next": "15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hot-toast": "^2.5.2"
+    "react-hot-toast": "^2.5.2",
+    "wavefile": "^11.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
