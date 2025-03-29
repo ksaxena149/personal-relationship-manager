@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Relationship Manager
+
+A web-based application for managing personal and professional relationships, inspired by MonicaHQ. Built with Next.js, React, Tailwind CSS, and PostgreSQL.
+
+## Features
+
+- User authentication and account management
+- Contact management
+- Notes and interaction tracking
+- Reminders for important events
+- Search functionality
+- Dark/light theme support
+- Responsive design
+
+## Tech Stack
+
+- **Frontend**: Next.js, React, Tailwind CSS
+- **Backend**: Next.js API routes
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: JWT (JSON Web Tokens)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js (v18+)
+- PostgreSQL database
+
+### Installation
+
+1. Clone this repository:
+   ```
+   git clone https://github.com/yourusername/personal-relationship-manager.git
+   cd personal-relationship-manager
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Set up environment variables:
+   Create a `.env` file in the root directory with the following variables:
+   ```
+   DATABASE_URL="postgresql://username:password@localhost:5432/prm?schema=public"
+   JWT_SECRET="your-secret-key"
+   ```
+
+4. Create the database schema:
+   ```
+   npx prisma migrate dev --name init
+   ```
+
+5. Generate Prisma client:
+   ```
+   npx prisma generate
+   ```
+
+6. Start the development server:
+   ```
+   npm run dev
+   ```
+
+7. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Project Structure
+
+```
+personal-relationship-manager/
+├── prisma/                   # Database schema and migrations
+├── public/                   # Static assets
+├── src/
+│   ├── app/                  # Next.js app directory
+│   │   ├── api/              # API routes
+│   │   ├── auth/             # Authentication pages
+│   │   ├── dashboard/        # Dashboard pages
+│   │   ├── contacts/         # Contact pages
+│   │   ├── reminders/        # Reminder pages
+│   │   └── settings/         # User settings
+│   ├── components/           # React components
+│   ├── utils/                # Utility functions
+│   └── styles/               # Global styles
+├── .env                      # Environment variables
+└── package.json              # Project dependencies
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### API Endpoints
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/api/auth/signup` - Create a new user account
+- `/api/auth/login` - Log in to an existing account
+- `/api/auth/reset-password` - Request a password reset
+- `/api/contacts` - List and create contacts
+- `/api/contacts/[id]` - Get, update, or delete a specific contact
+- `/api/notes` - List and create notes
+- `/api/notes/[id]` - Get, update, or delete a specific note
+- `/api/reminders` - List and create reminders
+- `/api/reminders/[id]` - Get, update, or delete a specific reminder
+- `/api/search` - Search across contacts, notes, and reminders
+- `/api/user` - Get or update user profile
+- `/api/user/password` - Change password
 
-## Learn More
+### Environment Setup
 
-To learn more about Next.js, take a look at the following resources:
+The application supports three environments:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `development` - Local development
+- `test` - Testing environment
+- `production` - Production deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Each environment can use a different database by setting the appropriate `DATABASE_URL` in the environment variables.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Acknowledgements
+
+- Inspired by [MonicaHQ](https://www.monicahq.com/)
