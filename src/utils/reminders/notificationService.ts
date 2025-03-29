@@ -14,6 +14,27 @@ export interface Reminder {
   };
 }
 
+// Helper to safely access localStorage (only in browser)
+const isBrowser = typeof window !== 'undefined';
+const safeLocalStorage = {
+  getItem: (key: string): string | null => {
+    if (isBrowser) {
+      return localStorage.getItem(key);
+    }
+    return null;
+  },
+  setItem: (key: string, value: string): void => {
+    if (isBrowser) {
+      localStorage.setItem(key, value);
+    }
+  },
+  removeItem: (key: string): void => {
+    if (isBrowser) {
+      localStorage.removeItem(key);
+    }
+  }
+};
+
 class ReminderNotificationService {
   private reminders: Reminder[] = [];
   private checkedReminders: Set<number> = new Set();
@@ -30,8 +51,10 @@ class ReminderNotificationService {
   private updateRemindersCallbacks: ((reminders: Reminder[]) => void)[] = [];
   
   constructor() {
+    if (!isBrowser) return; // Skip initialization on server
+    
     // Create persistent identifier for checked reminders
-    const savedCheckedReminders = localStorage.getItem('checkedReminders');
+    const savedCheckedReminders = safeLocalStorage.getItem('checkedReminders');
     if (savedCheckedReminders) {
       try {
         const parsed = JSON.parse(savedCheckedReminders);
@@ -46,6 +69,8 @@ class ReminderNotificationService {
   }
   
   private initAudio() {
+    if (!isBrowser) return;
+    
     try {
       // Create audio element for better compatibility
       this.audioElement = new Audio('/notification.mp3');
@@ -60,6 +85,8 @@ class ReminderNotificationService {
   }
   
   public playNotificationSound() {
+    if (!isBrowser) return;
+    
     try {
       if (this.audioElement) {
         // Reset the audio to the beginning
@@ -79,6 +106,8 @@ class ReminderNotificationService {
   }
   
   public startChecking() {
+    if (!isBrowser) return;
+    
     // Stop existing intervals if any
     this.stopChecking();
     
@@ -111,6 +140,8 @@ class ReminderNotificationService {
   }
   
   public stopChecking() {
+    if (!isBrowser) return;
+    
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
       this.checkInterval = null;
@@ -123,12 +154,14 @@ class ReminderNotificationService {
   }
   
   private async fetchReminders() {
+    if (!isBrowser) return;
+    
     try {
       // Set fetching flag to prevent duplicate fetches
       if (this.isFetching) return;
       this.isFetching = true;
       
-      const token = localStorage.getItem('token');
+      const token = safeLocalStorage.getItem('token');
       if (!token) {
         this.isFetching = false;
         return;
@@ -160,6 +193,8 @@ class ReminderNotificationService {
   }
   
   private checkReminders() {
+    if (!isBrowser) return;
+    
     const now = new Date();
     const dueReminders: Reminder[] = [];
     
@@ -181,7 +216,7 @@ class ReminderNotificationService {
     });
     
     // Save checked reminders to localStorage
-    localStorage.setItem('checkedReminders', JSON.stringify([...this.checkedReminders]));
+    safeLocalStorage.setItem('checkedReminders', JSON.stringify([...this.checkedReminders]));
     
     // If we have due reminders, notify subscribers
     if (dueReminders.length > 0) {
@@ -197,6 +232,8 @@ class ReminderNotificationService {
   }
   
   private processNotificationQueue() {
+    if (!isBrowser) return;
+    
     // Process one notification at a time
     if (this.notificationQueue.length > 0) {
       const reminder = this.notificationQueue.shift();
@@ -225,13 +262,17 @@ class ReminderNotificationService {
   }
   
   public markAsRead(reminderId: number) {
+    if (!isBrowser) return;
+    
     this.checkedReminders.add(reminderId);
-    localStorage.setItem('checkedReminders', JSON.stringify([...this.checkedReminders]));
+    safeLocalStorage.setItem('checkedReminders', JSON.stringify([...this.checkedReminders]));
   }
   
   public reset() {
+    if (!isBrowser) return;
+    
     this.checkedReminders.clear();
-    localStorage.removeItem('checkedReminders');
+    safeLocalStorage.removeItem('checkedReminders');
   }
   
   public subscribeToDueReminders(callback: (reminders: Reminder[]) => void) {
@@ -244,8 +285,11 @@ class ReminderNotificationService {
   
   public subscribeToUpdates(callback: (reminders: Reminder[]) => void) {
     this.updateRemindersCallbacks.push(callback);
-    // Immediately call the callback with current reminders
-    callback(this.reminders);
+    
+    // Immediately call the callback with current reminders if we're in the browser
+    if (isBrowser) {
+      callback(this.reminders);
+    }
     
     return () => {
       // Return unsubscribe function
@@ -271,8 +315,10 @@ class ReminderNotificationService {
   }
   
   public async completeReminder(reminderId: number) {
+    if (!isBrowser) return false;
+    
     try {
-      const token = localStorage.getItem('token');
+      const token = safeLocalStorage.getItem('token');
       if (!token) return false;
       
       const response = await fetch(`/api/reminders/${reminderId}/complete`, {
@@ -306,8 +352,10 @@ class ReminderNotificationService {
   }
   
   public async deleteReminder(reminderId: number) {
+    if (!isBrowser) return false;
+    
     try {
-      const token = localStorage.getItem('token');
+      const token = safeLocalStorage.getItem('token');
       if (!token) return false;
       
       const response = await fetch(`/api/reminders/${reminderId}`, {
@@ -327,7 +375,7 @@ class ReminderNotificationService {
       // Remove from checked reminders if it's there
       if (this.checkedReminders.has(reminderId)) {
         this.checkedReminders.delete(reminderId);
-        localStorage.setItem('checkedReminders', JSON.stringify([...this.checkedReminders]));
+        safeLocalStorage.setItem('checkedReminders', JSON.stringify([...this.checkedReminders]));
       }
       
       // Notify subscribers about the update

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { reminderService, Reminder } from '@/utils/reminders/notificationService';
 import toast from 'react-hot-toast';
-import { Toaster } from 'react-hot-toast';
 
 export default function RemindersPage() {
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -102,7 +101,6 @@ export default function RemindersPage() {
 
   return (
     <div className="space-y-6">
-      <Toaster position="top-right" />
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Reminders</h1>
         <Link 

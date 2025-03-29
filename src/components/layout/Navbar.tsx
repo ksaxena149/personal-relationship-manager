@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import ProfileImage from '@/components/ui/ProfileImage';
 import { reminderService, Reminder } from '@/utils/reminders/notificationService';
-import { Toaster } from 'react-hot-toast';
 import { toast } from 'react-hot-toast';
 
 interface User {
@@ -63,6 +62,9 @@ export default function Navbar() {
     // Get theme preference from localStorage or default to dark
     const theme = localStorage.getItem('theme') || 'dark';
     setIsDarkMode(theme === 'dark');
+    
+    // Apply theme to document
+    document.documentElement.classList.toggle('dark', theme === 'dark');
 
     // Listen for storage events (when localStorage changes)
     const handleStorageChange = () => {
@@ -143,7 +145,8 @@ export default function Navbar() {
     const newTheme = isDarkMode ? 'light' : 'dark';
     setIsDarkMode(!isDarkMode);
     localStorage.setItem('theme', newTheme);
-    // Apply theme to body
+    
+    // Apply theme to document
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
 
@@ -209,7 +212,6 @@ export default function Navbar() {
 
   return (
     <>
-      <Toaster position="top-right" />
       <nav className="bg-purple-900 text-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
