@@ -11,8 +11,9 @@ import {
 // GET handler to retrieve a specific note
 export async function GET(
   req: AuthRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
+  const { params } = context;
   const authResponse = await authMiddleware(req);
   if (authResponse) return authResponse;
 
@@ -57,8 +58,9 @@ export async function GET(
 // PUT handler to update a note
 export async function PUT(
   req: AuthRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
+  const { params } = context;
   const authResponse = await authMiddleware(req);
   if (authResponse) return authResponse;
 
@@ -128,8 +130,9 @@ export async function PUT(
 // DELETE handler to remove a note
 export async function DELETE(
   req: AuthRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
+  const { params } = context;
   const authResponse = await authMiddleware(req);
   if (authResponse) return authResponse;
 
