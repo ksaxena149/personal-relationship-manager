@@ -7,7 +7,7 @@ import {
   successResponse,
 } from '@/utils/api/response';
 
-// GET handler to search across contacts and notes
+// GET handler to search across contacts, notes, and reminders
 export async function GET(req: AuthRequest) {
   const authResponse = await authMiddleware(req);
   if (authResponse) return authResponse;
@@ -21,7 +21,7 @@ export async function GET(req: AuthRequest) {
       return badRequestResponse('Search query is required');
     }
 
-    // Search for contacts matching the query
+    // Search for contacts matching the query - now includes contacts with matching notes
     const contacts = await prisma.contact.findMany({
       where: {
         userId,
@@ -31,7 +31,34 @@ export async function GET(req: AuthRequest) {
           { email: { contains: query, mode: 'insensitive' } },
           { phoneNumber: { contains: query, mode: 'insensitive' } },
           { address: { contains: query, mode: 'insensitive' } },
+          // Search for contacts that have notes matching the query
+          {
+            notes: {
+              some: {
+                note: {
+                  contains: query,
+                  mode: 'insensitive',
+                },
+              },
+            },
+          },
         ],
+      },
+      include: {
+        // Include a sample of matching notes for context
+        notes: {
+          where: {
+            note: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          take: 2, // Just take a couple to give context
+          select: {
+            id: true,
+            note: true,
+          },
+        },
       },
     });
 
@@ -52,6 +79,8 @@ export async function GET(req: AuthRequest) {
             id: true,
             firstName: true,
             lastName: true,
+            email: true,
+            phoneNumber: true,
           },
         },
       },
@@ -61,10 +90,23 @@ export async function GET(req: AuthRequest) {
     const reminders = await prisma.reminder.findMany({
       where: {
         userId,
-        description: {
-          contains: query,
-          mode: 'insensitive',
-        },
+        OR: [
+          {
+            description: {
+              contains: query,
+              mode: 'insensitive',
+            },
+          },
+          // Also find reminders related to contacts matching the query
+          {
+            contact: {
+              OR: [
+                { firstName: { contains: query, mode: 'insensitive' } },
+                { lastName: { contains: query, mode: 'insensitive' } },
+              ],
+            },
+          },
+        ],
       },
       include: {
         contact: {
@@ -72,6 +114,7 @@ export async function GET(req: AuthRequest) {
             id: true,
             firstName: true,
             lastName: true,
+            email: true,
           },
         },
       },
