@@ -178,7 +178,7 @@ export default function ContactDetailClient({ contactId }: { contactId: string }
       </div>
 
       {/* Contact Information Card */}
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
+      <div className="bg-[var(--card-bg)] shadow rounded-lg p-6 mb-6 border border-[var(--card-border)]">
         <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -201,81 +201,73 @@ export default function ContactDetailClient({ contactId }: { contactId: string }
       </div>
 
       {/* Notes Section */}
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Notes</h2>
-          <Link
-            href={`/contacts/${contact.id}/notes/new`}
-            className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-md shadow-sm"
-          >
-            Add Note
-          </Link>
-        </div>
-        
-        {contact.notes.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400">No notes yet for this contact.</p>
-        ) : (
+      {contact.notes && contact.notes.length > 0 && (
+        <div className="bg-[var(--card-bg)] shadow rounded-lg p-6 mb-6 border border-[var(--card-border)]">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Notes</h2>
+            <Link
+              href={`/contacts/${contact.id}/notes/new`}
+              className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded"
+            >
+              Add Note
+            </Link>
+          </div>
           <div className="space-y-4">
             {contact.notes.map((note) => (
-              <div key={note.id} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
+              <div key={note.id} className="border-b border-[var(--card-border)] pb-4 last:border-0">
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-500 dark:text-gray-400">
                     {note.interactionDate ? `Interaction on ${formatDate(note.interactionDate)}` : formatDate(note.createdAt)}
                   </span>
-                  <div className="flex space-x-2">
-                    <Link 
-                      href={`/contacts/${contact.id}/notes/${note.id}/edit`}
-                      className="text-sm text-purple-600 hover:text-purple-800 dark:hover:text-purple-400"
-                    >
-                      Edit
-                    </Link>
-                  </div>
+                  <Link 
+                    href={`/contacts/${contact.id}/notes/${note.id}/edit`}
+                    className="text-sm text-purple-500 dark:text-purple-400 hover:text-purple-600 dark:hover:text-purple-300"
+                  >
+                    Edit
+                  </Link>
                 </div>
                 <p className="mt-1 whitespace-pre-wrap">{note.note}</p>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Reminders Section */}
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Reminders</h2>
-          <Link
-            href={`/reminders/new?contactId=${contact.id}`}
-            className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-md shadow-sm"
-          >
-            Add Reminder
-          </Link>
-        </div>
-        
-        {contact.reminders.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400">No reminders set for this contact.</p>
-        ) : (
+      {contact.reminders && contact.reminders.length > 0 && (
+        <div className="bg-[var(--card-bg)] shadow rounded-lg p-6 mb-6 border border-[var(--card-border)]">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Reminders</h2>
+            <Link
+              href={`/reminders/new?contactId=${contact.id}`}
+              className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded"
+            >
+              Add Reminder
+            </Link>
+          </div>
           <div className="space-y-4">
             {contact.reminders.map((reminder) => (
-              <div key={reminder.id} className="flex justify-between items-start border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
+              <div key={reminder.id} className="flex justify-between items-start border-b border-[var(--card-border)] pb-4 last:border-0">
                 <div>
                   <p className="font-medium">{formatDate(reminder.reminderDate)}</p>
-                  <p className="text-gray-600 dark:text-gray-400">{reminder.description}</p>
+                  <p className="text-gray-500 dark:text-gray-300">{reminder.description}</p>
                   {reminder.isRecurring && (
-                    <span className="text-sm text-purple-600">Recurring</span>
+                    <span className="text-xs bg-purple-500 text-white px-2 py-0.5 rounded-full mt-1 inline-block">
+                      Recurring
+                    </span>
                   )}
                 </div>
-                <div className="flex space-x-2">
-                  <Link 
-                    href={`/reminders/${reminder.id}/edit`}
-                    className="text-sm text-purple-600 hover:text-purple-800 dark:hover:text-purple-400"
-                  >
-                    Edit
-                  </Link>
-                </div>
+                <Link
+                  href={`/reminders/${reminder.id}/edit`}
+                  className="text-sm text-purple-500 dark:text-purple-400 hover:text-purple-600 dark:hover:text-purple-300"
+                >
+                  Edit
+                </Link>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 } 

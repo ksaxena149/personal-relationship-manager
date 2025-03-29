@@ -146,6 +146,11 @@ export default function Navbar() {
     setIsDarkMode(!isDarkMode);
     localStorage.setItem('theme', newTheme);
     
+    // Dispatch custom event for theme change
+    window.dispatchEvent(new CustomEvent('themeChanged', { 
+      detail: { theme: newTheme } 
+    }));
+    
     // Apply theme to document
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
@@ -212,7 +217,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-purple-900 text-white shadow-md">
+      <nav className="bg-purple-900 dark:bg-purple-900 bg-[var(--navbar-bg)] text-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
@@ -228,8 +233,8 @@ export default function Navbar() {
                     href="/dashboard"
                     className={`px-3 py-2 rounded-md text-sm font-medium ${
                       pathname === '/dashboard'
-                        ? 'bg-purple-800 text-white'
-                        : 'text-gray-300 hover:bg-purple-700 hover:text-white'
+                        ? 'bg-purple-800 dark:bg-purple-800 bg-purple-500 text-white'
+                        : 'text-gray-300 dark:text-gray-300 text-white hover:bg-purple-700 dark:hover:bg-purple-700 hover:bg-purple-400 hover:text-white'
                     }`}
                   >
                     Dashboard
@@ -238,8 +243,8 @@ export default function Navbar() {
                     href="/contacts"
                     className={`px-3 py-2 rounded-md text-sm font-medium ${
                       pathname === '/contacts' || pathname.startsWith('/contacts/')
-                        ? 'bg-purple-800 text-white'
-                        : 'text-gray-300 hover:bg-purple-700 hover:text-white'
+                        ? 'bg-purple-800 dark:bg-purple-800 bg-purple-500 text-white'
+                        : 'text-gray-300 dark:text-gray-300 text-white hover:bg-purple-700 dark:hover:bg-purple-700 hover:bg-purple-400 hover:text-white'
                     }`}
                   >
                     Contacts
@@ -248,8 +253,8 @@ export default function Navbar() {
                     href="/reminders"
                     className={`px-3 py-2 rounded-md text-sm font-medium ${
                       pathname === '/reminders'
-                        ? 'bg-purple-800 text-white'
-                        : 'text-gray-300 hover:bg-purple-700 hover:text-white'
+                        ? 'bg-purple-800 dark:bg-purple-800 bg-purple-500 text-white'
+                        : 'text-gray-300 dark:text-gray-300 text-white hover:bg-purple-700 dark:hover:bg-purple-700 hover:bg-purple-400 hover:text-white'
                     }`}
                   >
                     Reminders
@@ -258,8 +263,8 @@ export default function Navbar() {
                     href="/settings"
                     className={`px-3 py-2 rounded-md text-sm font-medium ${
                       pathname === '/settings'
-                        ? 'bg-purple-800 text-white'
-                        : 'text-gray-300 hover:bg-purple-700 hover:text-white'
+                        ? 'bg-purple-800 dark:bg-purple-800 bg-purple-500 text-white'
+                        : 'text-gray-300 dark:text-gray-300 text-white hover:bg-purple-700 dark:hover:bg-purple-700 hover:bg-purple-400 hover:text-white'
                     }`}
                   >
                     Settings
@@ -321,7 +326,7 @@ export default function Navbar() {
                   ) : (
                     <button
                       onClick={() => setIsSearchOpen(true)}
-                      className="p-2 rounded-md text-gray-300 hover:bg-purple-700 hover:text-white mr-2"
+                      className="p-2 rounded-md text-gray-300 dark:text-gray-300 text-white hover:bg-purple-700 dark:hover:bg-purple-700 hover:bg-purple-400 hover:text-white mr-2"
                       aria-label="Open search"
                     >
                       <svg
@@ -343,7 +348,7 @@ export default function Navbar() {
                   <div className="relative">
                     <button
                       onClick={() => setShowReminderDropdown(!showReminderDropdown)}
-                      className="p-2 rounded-md text-gray-300 hover:bg-purple-700 hover:text-white mr-2 relative"
+                      className="p-2 rounded-md text-gray-300 dark:text-gray-300 text-white hover:bg-purple-700 dark:hover:bg-purple-700 hover:bg-purple-400 hover:text-white mr-2 relative"
                       aria-label="Notifications"
                     >
                       <svg
@@ -418,7 +423,7 @@ export default function Navbar() {
 
                   <button
                     onClick={toggleTheme}
-                    className="p-2 rounded-md text-gray-300 hover:bg-purple-700 hover:text-white mr-2"
+                    className="p-2 rounded-md text-gray-300 dark:text-gray-300 text-white hover:bg-purple-700 dark:hover:bg-purple-700 hover:bg-purple-400 hover:text-white mr-2"
                     aria-label="Toggle theme"
                   >
                     {isDarkMode ? (

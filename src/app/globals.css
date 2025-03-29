@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --navbar-bg: #8b5cf6; /* Lighter purple for navbar in light mode */
+  --card-bg: #f9fafb; /* Light gray for cards in light mode */
+  --card-border: #e5e7eb;
 }
 
 @theme inline {
@@ -12,11 +15,14 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Remove the system preference override to allow our class-based toggle to work */
+/* Use dark class instead */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --navbar-bg: #4c1d95; /* Darker purple for navbar in dark mode */
+  --card-bg: #1f2937; /* Dark gray for cards in dark mode */
+  --card-border: #374151;
 }
 
 body {

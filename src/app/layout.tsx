@@ -2,6 +2,7 @@ import Navbar from '@/components/layout/Navbar';
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import type { Metadata } from 'next';
+import ThemeInitializer from '@/components/ThemeInitializer';
 
 const inter = { variable: '--font-inter', className: 'font-sans' };
 
@@ -16,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={`${inter.className} min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100`}>
         <Toaster 
           position="top-right"
@@ -28,6 +29,7 @@ export default function RootLayout({
             },
           }}
         />
+        <ThemeInitializer />
         <Navbar />
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
           {children}

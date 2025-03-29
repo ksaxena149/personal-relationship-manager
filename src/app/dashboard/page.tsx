@@ -113,7 +113,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Recent Contacts */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <div className="shadow rounded-lg p-6 bg-[var(--card-bg)] border border-[var(--card-border)]">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Recent Contacts</h2>
             <Link
@@ -164,7 +164,7 @@ export default function Dashboard() {
         </div>
 
         {/* Upcoming Reminders */}
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <div className="shadow rounded-lg p-6 bg-[var(--card-bg)] border border-[var(--card-border)]">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Upcoming Reminders</h2>
             <Link
@@ -232,12 +232,12 @@ export default function Dashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="mt-8 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <div className="shadow rounded-lg p-6 mt-8 bg-[var(--card-bg)] border border-[var(--card-border)]">
         <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <Link
             href="/contacts/new"
-            className="flex flex-col items-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+            className="flex flex-col items-center p-4 border border-[var(--card-border)] rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <div className="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-full mb-3">
               <svg
@@ -260,7 +260,7 @@ export default function Dashboard() {
 
           <Link
             href="/reminders/new"
-            className="flex flex-col items-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+            className="flex flex-col items-center p-4 border border-[var(--card-border)] rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full mb-3">
               <svg
@@ -283,7 +283,7 @@ export default function Dashboard() {
 
           <Link
             href="/search"
-            className="flex flex-col items-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+            className="flex flex-col items-center p-4 border border-[var(--card-border)] rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-full mb-3">
               <svg
@@ -306,7 +306,7 @@ export default function Dashboard() {
 
           <Link
             href="/settings"
-            className="flex flex-col items-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+            className="flex flex-col items-center p-4 border border-[var(--card-border)] rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-full mb-3">
               <svg

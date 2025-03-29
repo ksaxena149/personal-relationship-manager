@@ -61,6 +61,12 @@ export default function SettingsPage() {
     const newTheme = isDarkMode ? 'light' : 'dark';
     setIsDarkMode(!isDarkMode);
     localStorage.setItem('theme', newTheme);
+    
+    // Dispatch custom event for theme change
+    window.dispatchEvent(new CustomEvent('themeChanged', { 
+      detail: { theme: newTheme } 
+    }));
+    
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
 
@@ -116,7 +122,7 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Settings</h1>
 
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-6">
+      <div className="shadow rounded-lg p-6 space-y-6 bg-[var(--card-bg)] border border-[var(--card-border)]">
         <div>
           <h2 className="text-xl font-semibold mb-4">Account</h2>
           {user ? (
@@ -130,7 +136,7 @@ export default function SettingsPage() {
                 <div className="flex-1 w-full space-y-4">
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                    <p className="mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-100 dark:bg-gray-900">
+                    <p className="mt-1 p-2 border border-[var(--card-border)] rounded-md bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300">
                       {user.email}
                     </p>
                   </div>
@@ -143,7 +149,7 @@ export default function SettingsPage() {
                         id="firstName"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
-                        className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800"
+                        className="mt-1 p-2 w-full border border-[var(--card-border)] rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                       />
                     </div>
                     
@@ -154,7 +160,7 @@ export default function SettingsPage() {
                         id="lastName"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
-                        className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800"
+                        className="mt-1 p-2 w-full border border-[var(--card-border)] rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -176,13 +182,13 @@ export default function SettingsPage() {
           )}
         </div>
         
-        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+        <div className="border-t border-[var(--card-border)] pt-6">
           <h2 className="text-xl font-semibold mb-4">Appearance</h2>
           <div className="flex items-center">
             <span className="mr-2">Theme:</span>
             <button
               onClick={toggleTheme}
-              className="flex items-center px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-md"
+              className="flex items-center px-3 py-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-md hover:bg-gray-200 dark:hover:bg-gray-600"
             >
               {isDarkMode ? (
                 <>

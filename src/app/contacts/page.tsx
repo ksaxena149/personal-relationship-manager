@@ -233,26 +233,26 @@ export default function ContactsPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] overflow-hidden">
+    <div className="fixed inset-x-0 top-16 bottom-0 flex overflow-hidden">
       {/* Left sidebar with contact list */}
-      <div className={`${selectedContact ? 'hidden md:flex' : 'flex'} w-full md:w-96 h-full flex-col bg-gray-900 text-white overflow-y-auto border-r border-gray-700`}>
-        <div className="px-4 py-4 border-b border-gray-700 flex justify-between items-center">
+      <div className={`${selectedContact ? 'hidden md:flex' : 'flex'} w-full md:w-96 h-full flex-col bg-[var(--card-bg)] text-black dark:text-white overflow-y-auto border-r border-[var(--card-border)]`}>
+        <div className="px-4 py-4 border-b border-[var(--card-border)] flex justify-between items-center">
           <h1 className="text-2xl font-bold">Contacts</h1>
           <Link href="/contacts/new" className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded">
             Add New
           </Link>
         </div>
         
-        <div className="px-4 py-3 border-b border-gray-700">
+        <div className="px-4 py-3 border-b border-[var(--card-border)]">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
             <input
               type="text"
-              className="pl-10 pr-4 py-2 w-full bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="pl-10 pr-4 py-2 w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-[var(--card-border)] rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Search contacts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -273,14 +273,14 @@ export default function ContactsPage() {
             {/* Favorites section, only shown if there are favorites */}
             {favoriteContactsList.length > 0 && (
               <div className="py-2">
-                <div className="px-4 py-1 text-sm text-gray-500 uppercase tracking-wider">
+                <div className="px-4 py-1 text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Favorites
                 </div>
                 {favoriteContactsList.map((contact) => (
                   <div 
                     key={contact.id}
                     onClick={() => fetchContactDetails(contact.id)}
-                    className={`px-4 py-3 border-b border-gray-700 flex items-center cursor-pointer hover:bg-gray-800 ${selectedContact?.id === contact.id ? 'bg-gray-800' : ''}`}
+                    className={`px-4 py-3 border-b border-[var(--card-border)] flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${selectedContact?.id === contact.id ? 'bg-gray-100 dark:bg-gray-800' : ''}`}
                   >
                     <ProfileImage 
                       src={contact.profileImage} 
@@ -291,7 +291,7 @@ export default function ContactsPage() {
                     <div className="flex-1">
                       <div className="font-medium">{contact.firstName} {contact.lastName}</div>
                       {contact.email && (
-                        <div className="text-sm text-gray-400">{contact.email}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{contact.email}</div>
                       )}
                     </div>
                     <button 
@@ -314,7 +314,7 @@ export default function ContactsPage() {
             {nonFavoriteContactsList.length > 0 && (
               <div className="py-2">
                 {favoriteContactsList.length > 0 && (
-                  <div className="px-4 py-1 text-sm text-gray-500 uppercase tracking-wider">
+                  <div className="px-4 py-1 text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Contacts
                   </div>
                 )}
@@ -322,7 +322,7 @@ export default function ContactsPage() {
                   <div 
                     key={contact.id}
                     onClick={() => fetchContactDetails(contact.id)}
-                    className={`px-4 py-3 border-b border-gray-700 flex items-center cursor-pointer hover:bg-gray-800 ${selectedContact?.id === contact.id ? 'bg-gray-800' : ''}`}
+                    className={`px-4 py-3 border-b border-[var(--card-border)] flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${selectedContact?.id === contact.id ? 'bg-gray-100 dark:bg-gray-800' : ''}`}
                   >
                     <ProfileImage 
                       src={contact.profileImage} 
@@ -333,7 +333,7 @@ export default function ContactsPage() {
                     <div className="flex-1">
                       <div className="font-medium">{contact.firstName} {contact.lastName}</div>
                       {contact.email && (
-                        <div className="text-sm text-gray-400">{contact.email}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{contact.email}</div>
                       )}
                     </div>
                     <button 
@@ -353,7 +353,7 @@ export default function ContactsPage() {
             )}
             
             {filteredContacts.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-full text-gray-400">
+              <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400">
                 <p className="text-center">No contacts found</p>
                 {searchQuery && <p className="mt-2">Try a different search term</p>}
               </div>
@@ -363,7 +363,7 @@ export default function ContactsPage() {
       </div>
       
       {/* Right panel with contact details */}
-      <div className={`${selectedContact ? 'flex' : 'hidden md:flex'} flex-col flex-1 h-full bg-gray-800 overflow-y-auto`}>
+      <div className={`${selectedContact ? 'flex' : 'hidden md:flex'} flex-col flex-1 h-full bg-[var(--card-bg)] text-gray-900 dark:text-white overflow-y-auto`}>
         {selectedContact ? (
           <div className="p-6">
             <div className="flex justify-between items-start mb-6">
@@ -379,7 +379,7 @@ export default function ContactsPage() {
                     {selectedContact.firstName} {selectedContact.lastName}
                   </h2>
                   {selectedContact.email && (
-                    <p className="text-gray-400 mt-1">{selectedContact.email}</p>
+                    <p className="text-gray-500 dark:text-gray-400 mt-1">{selectedContact.email}</p>
                   )}
                 </div>
               </div>
@@ -390,13 +390,13 @@ export default function ContactsPage() {
                     setSelectedContact(null);
                     router.push('/contacts', { scroll: false });
                   }}
-                  className="md:hidden px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded"
+                  className="md:hidden px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white text-sm rounded"
                 >
                   Back
                 </button>
                 <Link
                   href={`/contacts/${selectedContact.id}`}
-                  className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded"
+                  className="px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white text-sm rounded"
                 >
                   View Full Page
                 </Link>
@@ -415,23 +415,23 @@ export default function ContactsPage() {
               </div>
             </div>
 
-            <div className="bg-gray-700 rounded-lg p-4 mb-6">
+            <div className="bg-white dark:bg-gray-700 border border-[var(--card-border)] rounded-lg p-4 mb-6">
               <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-gray-400">Email</p>
+                  <p className="text-gray-500 dark:text-gray-400">Email</p>
                   <p className="font-medium">{selectedContact.email || 'Not specified'}</p>
                 </div>
                 <div>
-                  <p className="text-gray-400">Phone</p>
+                  <p className="text-gray-500 dark:text-gray-400">Phone</p>
                   <p className="font-medium">{selectedContact.phoneNumber || 'Not specified'}</p>
                 </div>
                 <div>
-                  <p className="text-gray-400">Address</p>
+                  <p className="text-gray-500 dark:text-gray-400">Address</p>
                   <p className="font-medium">{selectedContact.address || 'Not specified'}</p>
                 </div>
                 <div>
-                  <p className="text-gray-400">Birthday</p>
+                  <p className="text-gray-500 dark:text-gray-400">Birthday</p>
                   <p className="font-medium">
                     {selectedContact.birthday ? formatDate(selectedContact.birthday) : 'Not specified'}
                   </p>
@@ -441,7 +441,7 @@ export default function ContactsPage() {
 
             {/* Notes section */}
             {selectedContact.notes && selectedContact.notes.length > 0 && (
-              <div className="bg-gray-700 rounded-lg p-4 mb-6">
+              <div className="bg-white dark:bg-gray-700 border border-[var(--card-border)] rounded-lg p-4 mb-6">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold">Notes</h3>
                   <Link
@@ -453,14 +453,14 @@ export default function ContactsPage() {
                 </div>
                 <div className="space-y-4">
                   {selectedContact.notes.map((note) => (
-                    <div key={note.id} className="border-b border-gray-600 pb-4 last:border-0">
+                    <div key={note.id} className="border-b border-[var(--card-border)] pb-4 last:border-0">
                       <div className="flex justify-between">
-                        <span className="text-sm text-gray-400">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
                           {note.interactionDate ? `Interaction on ${formatDate(note.interactionDate)}` : formatDate(note.createdAt)}
                         </span>
                         <Link 
                           href={`/contacts/${selectedContact.id}/notes/${note.id}/edit`}
-                          className="text-sm text-purple-400 hover:text-purple-300"
+                          className="text-sm text-purple-500 dark:text-purple-400 hover:text-purple-600 dark:hover:text-purple-300"
                         >
                           Edit
                         </Link>
@@ -474,7 +474,7 @@ export default function ContactsPage() {
 
             {/* Reminders section */}
             {selectedContact.reminders && selectedContact.reminders.length > 0 && (
-              <div className="bg-gray-700 rounded-lg p-4">
+              <div className="bg-white dark:bg-gray-700 border border-[var(--card-border)] rounded-lg p-4">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold">Reminders</h3>
                   <Link
@@ -486,10 +486,10 @@ export default function ContactsPage() {
                 </div>
                 <div className="space-y-4">
                   {selectedContact.reminders.map((reminder) => (
-                    <div key={reminder.id} className="flex justify-between items-start border-b border-gray-600 pb-4 last:border-0">
+                    <div key={reminder.id} className="flex justify-between items-start border-b border-[var(--card-border)] pb-4 last:border-0">
                       <div>
                         <p className="font-medium">{formatDate(reminder.reminderDate)}</p>
-                        <p className="text-gray-300">{reminder.description}</p>
+                        <p className="text-gray-500 dark:text-gray-300">{reminder.description}</p>
                         {reminder.isRecurring && (
                           <span className="text-xs bg-purple-500 text-white px-2 py-0.5 rounded-full mt-1 inline-block">
                             Recurring
@@ -509,8 +509,8 @@ export default function ContactsPage() {
             )}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24 mb-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <h2 className="text-xl font-bold mb-2">No Contact Selected</h2>
@@ -520,4 +520,4 @@ export default function ContactsPage() {
       </div>
     </div>
   );
-} 
+}
