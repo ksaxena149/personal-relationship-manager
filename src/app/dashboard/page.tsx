@@ -3,12 +3,20 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { toast } from 'react-hot-toast';
+import ProfileImage from '@/components/ui/ProfileImage';
+import { relationshipTypes } from '@/utils/relationshipConfig';
 
 interface Contact {
   id: number;
   firstName: string;
   lastName: string | null;
   email: string | null;
+  profileImage: string | null;
+  relationshipType?: string | null;
+  lastInteractionDate?: string | null;
+  customInteractionDays?: number | null;
 }
 
 interface Reminder {
@@ -18,70 +26,129 @@ interface Reminder {
   contact: {
     firstName: string;
     lastName: string | null;
+    profileImage: string;
+    relationshipType: string | null;
+    lastInteractionDate: string;
+    customInteractionDays: number | null;
   } | null;
+}
+
+interface ContactWithRelationship extends Contact {
+  relationshipType: string | null;
+  lastInteractionDate: string | null;
+  customInteractionDays: number | null;
 }
 
 export default function Dashboard() {
   const [recentContacts, setRecentContacts] = useState<Contact[]>([]);
   const [upcomingReminders, setUpcomingReminders] = useState<Reminder[]>([]);
+  const [interactionReminders, setInteractionReminders] = useState<Reminder[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isGeneratingReminders, setIsGeneratingReminders] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
-  useEffect(() => {
-    // Check if user is logged in
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/auth/login');
-      return;
-    }
+  // Function to fetch recent contacts
+  const fetchRecentContacts = async (token: string) => {
+    try {
+      const contactsResponse = await fetch('/api/contacts?limit=5', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    // Fetch data
-    const fetchData = async () => {
-      try {
-        // Fetch recent contacts
-        const contactsResponse = await fetch('/api/contacts?limit=5', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!contactsResponse.ok) {
-          if (contactsResponse.status === 401) {
-            // Token expired or invalid
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            router.push('/auth/login');
-            return;
-          }
-          throw new Error('Failed to fetch contacts');
+      if (!contactsResponse.ok) {
+        if (contactsResponse.status === 401) {
+          // Token expired or invalid
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          router.push('/auth/login');
+          return;
         }
-
-        const contactsData = await contactsResponse.json();
-        setRecentContacts(contactsData.data || []);
-
-        // Fetch upcoming reminders
-        const remindersResponse = await fetch('/api/reminders?limit=5', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!remindersResponse.ok) {
-          throw new Error('Failed to fetch reminders');
-        }
-
-        const remindersData = await remindersResponse.json();
-        setUpcomingReminders(remindersData.data || []);
-
-      } catch (err: any) {
-        setError(err.message || 'An error occurred while fetching data');
-      } finally {
-        setLoading(false);
+        throw new Error('Failed to fetch contacts');
       }
-    };
 
-    fetchData();
+      const contactsData = await contactsResponse.json();
+      setRecentContacts(contactsData.data || []);
+    } catch (err) {
+      console.error('Error fetching recent contacts:', err);
+    }
+  };
+
+  // Function to fetch upcoming reminders
+  const fetchUpcomingReminders = async (token: string) => {
+    try {
+      const remindersResponse = await fetch('/api/reminders?limit=5', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!remindersResponse.ok) {
+        throw new Error('Failed to fetch reminders');
+      }
+
+      const remindersData = await remindersResponse.json();
+      setUpcomingReminders(remindersData.data || []);
+    } catch (err) {
+      console.error('Error fetching upcoming reminders:', err);
+    }
+  };
+
+  // Function to fetch interaction reminders
+  const fetchInteractionReminders = async (token: string) => {
+    try {
+      const response = await fetch('/api/reminders?type=interaction', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setInteractionReminders(data.data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching interaction reminders:', error);
+    }
+  };
+
+  // Combined function to fetch all data
+  const fetchAllData = async () => {
+    setLoading(true);
+    try {
+      // Check if user is logged in
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/auth/login');
+        return;
+      }
+
+      // Fetch all data in parallel
+      await Promise.all([
+        fetchRecentContacts(token),
+        fetchUpcomingReminders(token),
+        fetchInteractionReminders(token)
+      ]);
+    } catch (err: any) {
+      setError(err.message || 'An error occurred while fetching data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllData();
+    
+    // Set up a refresh interval every minute (optional)
+    const refreshInterval = setInterval(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        fetchRecentContacts(token);
+      }
+    }, 60000); // Refresh every minute
+    
+    return () => clearInterval(refreshInterval);
   }, [router]);
 
   const formatDate = (dateString: string) => {
@@ -91,6 +158,73 @@ export default function Dashboard() {
       month: 'short',
       day: 'numeric',
     });
+  };
+
+  const generateRelationshipReminders = async () => {
+    setIsGeneratingReminders(true);
+    
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/auth/login');
+        return;
+      }
+      
+      const response = await fetch('/api/relationship-reminders', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(`Generated ${data.data.length} reminders`);
+        
+        // Reload reminders and contact data
+        await fetchInteractionReminders(token);
+        await fetchRecentContacts(token);
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to generate reminders');
+      }
+    } catch (error) {
+      console.error('Error generating reminders:', error);
+      toast.error('Failed to generate reminders');
+    } finally {
+      setIsGeneratingReminders(false);
+    }
+  };
+  
+  const completeReminder = async (reminderId: number) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/auth/login');
+        return;
+      }
+      
+      const response = await fetch(`/api/reminders/${reminderId}/complete`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        toast.success('Reminder marked as complete');
+        
+        // Reload reminders and contact data
+        await fetchInteractionReminders(token);
+        await fetchRecentContacts(token);
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to complete reminder');
+      }
+    } catch (error) {
+      console.error('Error completing reminder:', error);
+      toast.error('Failed to complete reminder');
+    }
   };
 
   if (loading) {
@@ -125,31 +259,35 @@ export default function Dashboard() {
           </div>
 
           {recentContacts.length > 0 ? (
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+            <div className="space-y-4">
               {recentContacts.map((contact) => (
-                <li key={contact.id} className="py-3">
-                  <Link
-                    href={`/contacts/${contact.id}`}
-                    className="flex items-center hover:bg-gray-50 dark:hover:bg-gray-700 -mx-4 px-4 py-2 rounded-md"
-                  >
-                    <div className="flex-shrink-0 bg-purple-500 rounded-full h-10 w-10 flex items-center justify-center text-white font-semibold">
-                      {contact.firstName.charAt(0)}
-                      {contact.lastName ? contact.lastName.charAt(0) : ''}
-                    </div>
-                    <div className="ml-4">
-                      <p className="font-medium">
-                        {contact.firstName} {contact.lastName}
+                <Link
+                  key={contact.id}
+                  href={`/contacts/${contact.id}`}
+                  className="flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md"
+                >
+                  <div className="flex-shrink-0 bg-purple-500 rounded-full h-10 w-10 flex items-center justify-center text-white font-semibold">
+                    {contact.firstName.charAt(0)}
+                    {contact.lastName ? contact.lastName.charAt(0) : ''}
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="font-medium">
+                      {contact.firstName} {contact.lastName}
+                    </h3>
+                    {contact.email && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {contact.email}
                       </p>
-                      {contact.email && (
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          {contact.email}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
-                </li>
+                    )}
+                  </div>
+                  
+                  {/* Add interaction status indicator */}
+                  {contact.relationshipType && contact.lastInteractionDate && (
+                    <InteractionStatus contact={contact} />
+                  )}
+                </Link>
               ))}
-            </ul>
+            </div>
           ) : (
             <p className="text-gray-500 dark:text-gray-400 py-4">
               No contacts yet.{' '}
@@ -334,6 +472,56 @@ export default function Dashboard() {
           </Link>
         </div>
       </div>
+    </div>
+  );
+}
+
+// Add this new component for interaction status
+function InteractionStatus({ contact }: { contact: Contact }) {
+  // Calculate days since last interaction
+  if (!contact.relationshipType || !contact.lastInteractionDate) return null;
+  
+  const lastInteraction = new Date(contact.lastInteractionDate);
+  const today = new Date();
+  const daysSinceInteraction = Math.floor((today.getTime() - lastInteraction.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Get recommended interaction days based on relationship type
+  let recommendedDays = 0;
+  
+  if (contact.customInteractionDays && contact.customInteractionDays > 0) {
+    recommendedDays = contact.customInteractionDays;
+  } else if (contact.relationshipType) {
+    const relationshipType = relationshipTypes.find(type => type.id === contact.relationshipType);
+    if (relationshipType) {
+      recommendedDays = relationshipType.recommendedInteractionDays;
+    }
+  }
+  
+  if (recommendedDays <= 0) return null;
+  
+  // Determine status
+  let statusColor = '';
+  let statusText = '';
+  
+  if (daysSinceInteraction === 0) {
+    statusColor = 'bg-green-500';
+    statusText = 'Today';
+  } else if (daysSinceInteraction > recommendedDays) {
+    statusColor = 'bg-red-500';
+    statusText = `${daysSinceInteraction}d`;
+  } else if (daysSinceInteraction > (recommendedDays * 0.7)) {
+    statusColor = 'bg-yellow-500';
+    statusText = `${daysSinceInteraction}d`;
+  } else {
+    statusColor = 'bg-blue-500';
+    statusText = `${daysSinceInteraction}d`;
+  }
+  
+  return (
+    <div className="ml-auto">
+      <span className={`${statusColor} text-white text-xs px-2 py-1 rounded-full`} title={`${daysSinceInteraction} days since last interaction`}>
+        {statusText}
+      </span>
     </div>
   );
 }

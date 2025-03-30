@@ -27,30 +27,34 @@ model User {
 }
 
 model Contact {
-  id            Int         @id @default(autoincrement())
-  userId        Int
-  firstName     String
-  lastName      String?
-  email         String?
-  phoneNumber   String?
-  address       String?
-  birthday      DateTime?
-  profileImage  String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  notes         Note[]
-  reminders     Reminder[]
+  id                      Int         @id @default(autoincrement())
+  userId                  Int
+  firstName               String
+  lastName                String?
+  email                   String?
+  phoneNumber             String?
+  address                 String?
+  birthday                DateTime?
+  profileImage            String?
+  relationshipType        String?     // e.g. close_family, friends, colleagues
+  customInteractionDays   Int?        // Custom days for interaction frequency
+  lastInteractionDate     DateTime?   // Date of last recorded interaction
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+  user                    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes                   Note[]
+  reminders               Reminder[]
 }
 
 model Note {
-  id              Int       @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   contactId       Int
   note            String
   interactionDate DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  contact         Contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  isInteraction   Boolean     @default(false)  // Whether this note represents an interaction
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  contact         Contact     @relation(fields: [contactId], references: [id], onDelete: Cascade)
 }
 
 model Reminder {

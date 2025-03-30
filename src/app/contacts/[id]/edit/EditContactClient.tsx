@@ -4,6 +4,7 @@ import { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ImageUploader from '@/components/ui/ImageUploader';
+import { relationshipTypes } from '@/utils/relationshipConfig';
 
 interface Contact {
   id: number;
@@ -14,6 +15,9 @@ interface Contact {
   address: string | null;
   birthday: string | null;
   profileImage: string | null;
+  relationshipType: string | null;
+  customInteractionDays: number | null;
+  lastInteractionDate: string | null;
 }
 
 export default function EditContactClient({ contactId }: { contactId: string }) {
@@ -31,6 +35,11 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
   const [address, setAddress] = useState('');
   const [birthday, setBirthday] = useState('');
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [relationshipType, setRelationshipType] = useState<string>('');
+  const [customInteractionDays, setCustomInteractionDays] = useState<string>('');
+  
+  // Flag to show custom interaction days input
+  const [showCustomDays, setShowCustomDays] = useState(false);
   
   useEffect(() => {
     async function fetchContact() {
@@ -76,6 +85,11 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
           const day = String(date.getDate()).padStart(2, '0');
           setBirthday(`${year}-${month}-${day}`);
         }
+        
+        // Set relationship type fields
+        setRelationshipType(contactData.relationshipType || '');
+        setCustomInteractionDays(contactData.customInteractionDays?.toString() || '');
+        setShowCustomDays(contactData.relationshipType === 'custom');
       } catch (err: any) {
         setError(err.message || 'An error occurred while fetching contact');
         console.error('Error fetching contact:', err);
@@ -86,6 +100,14 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
 
     fetchContact();
   }, [contactId, router]);
+
+  // Watch for relationship type changes to toggle custom days input
+  useEffect(() => {
+    setShowCustomDays(relationshipType === 'custom');
+    if (relationshipType !== 'custom') {
+      setCustomInteractionDays('');
+    }
+  }, [relationshipType]);
 
   const handleImageUpload = (imageUrl: string) => {
     setProfileImage(imageUrl);
@@ -117,7 +139,9 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
           phoneNumber: phoneNumber || null,
           address: address || null,
           birthday: birthday || null,
-          profileImage
+          profileImage,
+          relationshipType: relationshipType || null,
+          customInteractionDays: relationshipType === 'custom' ? customInteractionDays : null
         })
       });
       
@@ -263,6 +287,58 @@ export default function EditContactClient({ contactId }: { contactId: string }) 
                 onChange={(e) => setBirthday(e.target.value)}
                 className="w-full rounded-md border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
+            </div>
+          </div>
+
+          {/* Relationship Section */}
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">Relationship</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="relationshipType" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Relationship Type
+                </label>
+                <select
+                  id="relationshipType"
+                  value={relationshipType}
+                  onChange={(e) => setRelationshipType(e.target.value)}
+                  className="w-full rounded-md border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                >
+                  <option value="">Select a relationship type</option>
+                  {relationshipTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.label} ({type.id !== 'custom' ? `${type.recommendedInteractionDays} days` : 'custom'})
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  {relationshipType ? 
+                    relationshipTypes.find(t => t.id === relationshipType)?.description || '' 
+                    : 'Select a relationship type to get recommended interaction frequencies'}
+                </p>
+              </div>
+              
+              {showCustomDays && (
+                <div>
+                  <label htmlFor="customInteractionDays" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Custom Interaction Frequency (days)
+                  </label>
+                  <input
+                    type="number"
+                    id="customInteractionDays"
+                    min="1"
+                    max="365"
+                    value={customInteractionDays}
+                    onChange={(e) => setCustomInteractionDays(e.target.value)}
+                    className="w-full rounded-md border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    placeholder="Enter days"
+                    required={relationshipType === 'custom'}
+                  />
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    How often you'd like to be reminded to interact with this contact (in days)
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
