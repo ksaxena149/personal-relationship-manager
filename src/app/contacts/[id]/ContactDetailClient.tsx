@@ -6,6 +6,7 @@ import Link from 'next/link';
 import ProfileImage from '@/components/ui/ProfileImage';
 import { relationshipTypes, getRandomInteractionVerb } from '@/utils/relationshipConfig';
 import { toast } from 'react-hot-toast';
+import InteractionGraph from '@/components/ui/InteractionGraph';
 
 interface Note {
   id: number;
@@ -406,6 +407,16 @@ export default function ContactDetailClient({ contactId }: { contactId: string }
               {getRelationshipInfo()?.interactionStatus === 'good' && (
                 <p>You're doing well staying in touch with this contact.</p>
               )}
+            </div>
+            
+            {/* Interaction History Graph */}
+            <div className="mt-8">
+              <h3 className="text-lg font-medium mb-3">Interaction History</h3>
+              <div className="w-full bg-white dark:bg-gray-900 p-6 rounded-md border border-gray-200 dark:border-gray-700">
+                <div className="overflow-auto">
+                  <InteractionGraph contactId={contactId} months={12} />
+                </div>
+              </div>
             </div>
           </div>
         ) : (
