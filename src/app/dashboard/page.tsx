@@ -464,7 +464,7 @@ export default function Dashboard() {
                       </div>
                       <InteractionStatus contact={contact} />
                     </div>
-                    <div className="w-full p-4 bg-white dark:bg-gray-900 rounded-md border border-gray-100 dark:border-gray-700">
+                    <div className="w-full p-4 bg-white dark:bg-black rounded-md border border-gray-100 dark:border-gray-700">
                       <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">6-Month Interaction History</h4>
                       <div className="min-h-[80px]">
                         <InteractionGraph contactId={contact.id} months={6} compact={true} />

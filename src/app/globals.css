@@ -34,6 +34,11 @@
   --ted-gray-dark: #1A1F2C;
 }
 
+/* Override Tailwind's gray-900 to be pure black in dark mode */
+.dark .dark\:bg-gray-900 {
+  background-color: #000000 !important;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
