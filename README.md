@@ -1,4 +1,4 @@
-# Personal Relationship Manager
+# TedPRM
 
 A web-based application for managing personal and professional relationships, inspired by MonicaHQ. Built with Next.js, React, Tailwind CSS, and PostgreSQL.
 
@@ -30,8 +30,8 @@ A web-based application for managing personal and professional relationships, in
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/personal-relationship-manager.git
-   cd personal-relationship-manager
+   git clone https://github.com/yourusername/tedprm.git
+   cd tedprm
    ```
 
 2. Install dependencies:
@@ -42,7 +42,7 @@ A web-based application for managing personal and professional relationships, in
 3. Set up environment variables:
    Create a `.env` file in the root directory with the following variables:
    ```
-   DATABASE_URL="postgresql://username:password@localhost:5432/prm?schema=public"
+   DATABASE_URL="postgresql://username:password@localhost:5432/tedprm?schema=public"
    JWT_SECRET="your-secret-key"
    ```
 
@@ -66,7 +66,7 @@ A web-based application for managing personal and professional relationships, in
 ## Project Structure
 
 ```
-personal-relationship-manager/
+tedprm/
 ├── prisma/                   # Database schema and migrations
 ├── public/                   # Static assets
 ├── src/

@@ -1,4 +1,4 @@
-# Personal Relationship Manager - Feature List
+# TedPRM - Feature List
 
 ## User Authentication and Account Management
 - User registration and login

@@ -7,8 +7,8 @@ import ThemeInitializer from '@/components/ThemeInitializer';
 const inter = { variable: '--font-inter', className: 'font-sans' };
 
 export const metadata: Metadata = {
-  title: "Personal Relationship Manager",
-  description: "Keep track of important people and events",
+  title: "TedPRM - Personal Relationship Manager",
+  description: "Keep track of important people and events with TedPRM",
 };
 
 export default function RootLayout({
