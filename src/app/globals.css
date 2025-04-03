@@ -6,6 +6,8 @@
   --navbar-bg: #8b5cf6; /* Lighter purple for navbar in light mode */
   --card-bg: #f9fafb; /* Light gray for cards in light mode */
   --card-border: #e5e7eb;
+  --purple-primary: #8b5cf6;
+  --purple-dark: #7c3aed;
 }
 
 @theme inline {
@@ -23,10 +25,67 @@
   --navbar-bg: #4c1d95; /* Darker purple for navbar in dark mode */
   --card-bg: #1f2937; /* Dark gray for cards in dark mode */
   --card-border: #374151;
+  --purple-primary: #8b5cf6;
+  --purple-dark: #7c3aed;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Landing page specific styles */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, #a78bfa, #7c3aed);
+}
+
+.purple-glow {
+  position: relative;
+}
+
+.purple-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  z-index: -1;
+  box-shadow: 0 0 40px 10px rgba(139, 92, 246, 0.3);
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 50%;
+  height: 300%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shimmer 6s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(200%) rotate(30deg);
+  }
 }
