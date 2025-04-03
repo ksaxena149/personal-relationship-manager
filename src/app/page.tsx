@@ -203,38 +203,39 @@ export default function LandingPage() {
       </section>
       
       {/* Transform Section */}
-      <section className="py-12 relative">
+      <section className="py-16 my-8 relative">
         <div className="absolute left-1/4 top-1/4 w-1/3 h-1/3 bg-ted-purple/10 rounded-full blur-3xl"></div>
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="flex flex-col md:flex-row gap-8">
-            <div className="md:w-1/2">
-              <h2 className="text-2xl md:text-4xl font-bold mb-6 leading-tight">
-                Transform Your <span className="text-gradient">Personal Connections</span><br />
-                With Smart Relationship Management
+        <div className="container mx-auto px-0">
+          <div className="flex flex-col md:flex-row gap-6 mx-auto max-w-5xl">
+            <div className="md:w-3/5 pl-2 pr-2">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">
+                <div className="whitespace-nowrap">Transform Your <span className="text-gradient">Personal Connections</span></div>
+                <div>With Smart Relationship</div>
+                <div>Management</div>
               </h2>
-              <p className="text-base text-gray-300 mb-8">
+              <p className="text-sm text-gray-300 mb-6">
                 In today's busy world, maintaining meaningful relationships is harder than ever. TedPRM gives you the tools to nurture connections without the mental overhead.
               </p>
               
-              <div className="space-y-8">
-                <div className="flex items-start gap-4">
-                  <div className="bg-ted-purple rounded-full w-12 h-12 flex items-center justify-center shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+              <div className="space-y-6">
+                <div className="flex items-start gap-3">
+                  <div className="bg-ted-purple rounded-full w-10 h-10 flex items-center justify-center shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
                       <circle cx="12" cy="12" r="10"></circle>
                       <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Save Time & Mental Energy</h3>
-                    <p className="text-gray-300 text-base">
+                    <h3 className="text-lg font-bold mb-1">Save Time & Mental Energy</h3>
+                    <p className="text-gray-300 text-sm">
                       Stop relying on your memory to maintain relationships. TedPRM handles the remembering so you can focus on connecting.
                     </p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-4">
-                  <div className="bg-ted-purple rounded-full w-12 h-12 flex items-center justify-center shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                <div className="flex items-start gap-3">
+                  <div className="bg-ted-purple rounded-full w-10 h-10 flex items-center justify-center shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
                       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                       <circle cx="9" cy="7" r="4"></circle>
                       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -242,16 +243,16 @@ export default function LandingPage() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Strengthen Your Network</h3>
-                    <p className="text-gray-300 text-base">
+                    <h3 className="text-lg font-bold mb-1">Strengthen Your Network</h3>
+                    <p className="text-gray-300 text-sm">
                       Build stronger personal and professional relationships through consistent, thoughtful interactions that deepen connections over time.
                     </p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-4">
-                  <div className="bg-ted-purple rounded-full w-12 h-12 flex items-center justify-center shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                <div className="flex items-start gap-3">
+                  <div className="bg-ted-purple rounded-full w-10 h-10 flex items-center justify-center shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
                       <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
                       <line x1="9" y1="9" x2="9.01" y2="9"></line>
                       <line x1="15" y1="9" x2="15.01" y2="9"></line>
@@ -259,8 +260,8 @@ export default function LandingPage() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Never Miss Important Moments</h3>
-                    <p className="text-gray-300 text-base">
+                    <h3 className="text-lg font-bold mb-1">Never Miss Important Moments</h3>
+                    <p className="text-gray-300 text-sm">
                       Show up for the people who matter with timely reminders for birthdays, anniversaries, and other significant events.
                     </p>
                   </div>
@@ -268,18 +269,19 @@ export default function LandingPage() {
               </div>
             </div>
             
-            <div className="md:w-1/2 purple-glow">
-              <div className="bg-black/30 p-5 rounded-xl border border-white/5 backdrop-blur-sm h-full">
-                <div className="h-full bg-gradient-to-br from-black/60 to-black/40 rounded-lg overflow-hidden relative">
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <div className="w-16 h-16 rounded-full bg-ted-purple flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+            <div className="md:w-2/5 purple-glow mt-4 md:mt-0 flex items-center pl-2 pr-2">
+              <div className="bg-black/30 p-3 rounded-xl border border-white/10 backdrop-blur-sm w-full shadow-xl">
+                <div className="w-full h-[180px] md:h-[240px] bg-gradient-to-br from-black/60 to-black/40 rounded-lg overflow-hidden relative shimmer">
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                    <div className="w-12 h-12 rounded-full bg-ted-purple flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
                         <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                       </svg>
                     </div>
+                    <p className="text-white text-center mt-2 text-sm font-medium">Contacts Preview</p>
                   </div>
                 </div>
               </div>
