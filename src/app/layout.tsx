@@ -7,8 +7,8 @@ import ThemeInitializer from '@/components/ThemeInitializer';
 const inter = { variable: '--font-inter', className: 'font-sans' };
 
 export const metadata: Metadata = {
-  title: "Personal Relationship Manager",
-  description: "Keep track of important people and events",
+  title: "TedPRM - Personal Relationship Manager",
+  description: "Keep track of important people and events with TedPRM",
 };
 
 export default function RootLayout({
@@ -16,9 +16,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Since this is a server component, we need a different approach
+  // We'll use pathname directly in the component to determine when to show the navbar
+  
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100`}>
+      <body className={`${inter.className} min-h-screen`}>
         <Toaster 
           position="top-right"
           toastOptions={{
@@ -30,10 +33,8 @@ export default function RootLayout({
           }}
         />
         <ThemeInitializer />
-        <Navbar />
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
-          {children}
-        </main>
+        {/* The NavbarWrapper is handled inside individual pages */}
+        {children}
       </body>
     </html>
   );

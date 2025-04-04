@@ -1,0 +1,53 @@
+# TedPRM - Feature List
+
+## User Authentication and Account Management
+- User registration and login
+- Password management (reset, change)
+- User profile management
+- Profile image upload
+
+## Contact Management
+- Add, edit, and delete contacts
+- Store basic contact information (name, email, phone, address)
+- Track relationship types (family, friends, colleagues)
+- Record birthdays and important dates
+- Contact profile images
+- Custom interaction frequency settings
+
+## Notes and Interaction Tracking
+- Add notes to contacts
+- Track interactions with contacts
+- Record interaction dates
+- View interaction history
+- Search through notes
+
+## Reminders System
+- Create and manage reminders
+- Contact-specific reminders
+- General reminders
+- Recurring reminders
+- Automatic relationship reminders based on interaction frequency
+- Mark reminders as completed
+
+## Search Functionality
+- Global search across all data
+- Search contacts, notes, and reminders
+- Filter search results
+
+## Data Management
+- Import contacts from external sources
+- Export data for backup
+- Organize contacts by relationship type
+
+## User Experience Features
+- Dark/light theme support with theme toggle
+- Responsive design for all devices
+- Dashboard with overview of relationships and upcoming reminders
+- Modern minimalist UI with purple color scheme
+
+## Technical Features
+- Secure authentication with JWT
+- Database separation for development, testing, and production
+- Comprehensive API endpoints
+- Data validation and error handling
+- Image upload functionality 
