@@ -1,15 +1,35 @@
 services:
   db:
-    image: postgres
+    image: arm64v8/postgres:latest
+    platform: linux/arm64
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-example}
+      POSTGRES_DB: ${POSTGRES_DB:-personal_relationship_manager}
     ports:
-      - 8080:8080
+      - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data 
- 
- 
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/arm64
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-example}@db:5432/${POSTGRES_DB:-personal_relationship_manager}
+      - NODE_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   pgdata:
