@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProfileImage from '@/components/ui/ProfileImage';
@@ -32,7 +32,8 @@ interface Reminder {
   isRecurring: boolean;
 }
 
-export default function ContactsPage() {
+// Create a client component that uses searchParams
+function ContactsContent() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -519,5 +520,14 @@ export default function ContactsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function ContactsPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-700"></div></div>}>
+      <ContactsContent />
+    </Suspense>
   );
 }

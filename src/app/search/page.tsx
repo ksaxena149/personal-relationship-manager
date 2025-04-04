@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -42,7 +42,8 @@ interface Reminder {
   } | null;
 }
 
-export default function SearchPage() {
+// Create a client component that uses searchParams
+function SearchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('query') || '';
@@ -239,5 +240,14 @@ export default function SearchPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-700"></div></div>}>
+      <SearchContent />
+    </Suspense>
   );
 } 

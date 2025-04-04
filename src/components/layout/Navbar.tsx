@@ -223,8 +223,7 @@ export default function Navbar() {
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
                 <Link href="/dashboard" className="flex items-center gap-2">
-                  <Image src="/logo.svg" alt="PRM Logo" width={32} height={32} />
-                  <span className="text-xl font-bold">PRM</span>
+                  <span className="text-xl font-bold">TedPRM</span>
                 </Link>
               </div>
               {isLoggedIn && (
