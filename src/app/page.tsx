@@ -115,10 +115,10 @@ export default function LandingPage() {
         <div className="absolute bottom-0 left-1/4 w-1/3 h-1/3 bg-ted-purple/20 rounded-full blur-3xl"></div>
         
         <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
+          <div className="flex flex-col items-center text-center max-w-1xl mx-auto">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Nurture Your
-              <div><span className="text-gradient">Relationships</span> Like Never Before</div>
+              Nurture Your <span className="text-gradient">Relationships</span>
+              <div> Like Never Before</div>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
               TedPRM helps you keep track of the people who matter, reminds you of important events, and ensures no relationship falls through the cracks.
@@ -158,7 +158,7 @@ export default function LandingPage() {
         <div className="absolute left-0 top-1/4 w-1/3 h-1/3 bg-ted-purple/10 rounded-full blur-3xl"></div>
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Powerful Features</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4"><span className="text-gradient">Powerful</span> Features</h2>
             <p className="text-gray-300 max-w-2xl mx-auto">Everything you need to maintain and strengthen your personal and professional relationships.</p>
           </div>
           
