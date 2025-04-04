@@ -57,8 +57,8 @@ export default function SignupPage() {
   return (
     <div className="flex min-h-screen flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-lg">
-        <h1 className="text-3xl font-extrabold text-center text-purple-700 dark:text-purple-400">
-          Personal Relationship Manager
+        <h1 className="text-3xl font-extrabold text-center">
+        <span className="text-gradient">Ted</span>PRM
         </h1>
         <h2 className="mt-6 text-center text-2xl font-bold">
           Create a new account
