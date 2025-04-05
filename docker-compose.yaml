@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-example}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meowmeow}
       POSTGRES_DB: ${POSTGRES_DB:-personal_relationship_manager}
     ports:
       - "5432:5432"
@@ -23,9 +23,9 @@ services:
       dockerfile: Dockerfile
     platform: linux/arm64
     ports:
-      - "3000:3000"
+      - "3002:3000"
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-example}@db:5432/${POSTGRES_DB:-personal_relationship_manager}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-meowmeow}@db:5432/${POSTGRES_DB:-personal_relationship_manager}?schema=public
       - NODE_ENV=production
     depends_on:
       db:
